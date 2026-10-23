@@ -1,46 +1,69 @@
-from kpi_calculator import load_production_data, calculate_kpis
+"""
+AI Manufacturing Performance Assistant
+Manufacturing exception detection module.
+
+This educational prototype uses synthetic production data.
+Thresholds are provisional and should be validated before real-world use.
+"""
+
+try:
+    from .kpi_calculator import load_production_data, calculate_kpis
+except ImportError:
+    from kpi_calculator import load_production_data, calculate_kpis
 
 
-def detect_exceptions(kpi):
-    alerts = []
+def detect_exceptions(kpi_data):
+    """
+    Detect manufacturing exceptions from one KPI record.
 
-    if kpi["doc_residual_oil_pct"] > 3.0:
-        alerts.append("HIGH DOC RESIDUAL OIL")
+    Expected KPI fields:
+    - doc_residual_oil_pct
+    - doc_moisture_pct
+    - solvent_litres_per_tonne
+    - capacity_utilization_pct
 
-    if kpi["doc_moisture_pct"] > 11.0:
-        alerts.append("HIGH DOC MOISTURE")
+    Returns a list of exception messages.
+    """
+    exceptions = []
 
-    if kpi["solvent_litres_per_tonne"] > 250.0:
-        alerts.append("HIGH SOLVENT CONSUMPTION")
+    if kpi_data["doc_residual_oil_pct"] > 3.0:
+        exceptions.append("HIGH DOC RESIDUAL OIL")
 
-    if kpi["capacity_utilization_pct"] < 50.0:
-        alerts.append("LOW CAPACITY UTILIZATION")
+    if kpi_data["doc_moisture_pct"] > 11.0:
+        exceptions.append("HIGH DOC MOISTURE")
 
-    return alerts
+    if kpi_data["solvent_litres_per_tonne"] > 250.0:
+        exceptions.append("HIGH SOLVENT CONSUMPTION")
+
+    if kpi_data["capacity_utilization_pct"] < 50.0:
+        exceptions.append("LOW CAPACITY UTILIZATION")
+
+    return exceptions
 
 
-def main():
-    records = load_production_data()
+def detect_exceptions_for_records(kpi_records):
+    """
+    Detect exceptions across multiple KPI records.
 
-    print("AI Manufacturing Performance Assistant")
-    print("EXCEPTION DETECTION REPORT")
-    print("=" * 45)
+    Returns a list of dictionaries containing each record's date
+    and its detected exceptions.
+    """
+    results = []
 
-    for record in records:
-        kpi = calculate_kpis(record)
-        alerts = detect_exceptions(kpi)
+    for record in kpi_records:
+        exceptions = detect_exceptions(record)
 
-        print(f"\nDate: {kpi['date']}")
+        if exceptions:
+            results.append({
+                "date": record.get("date", "Unknown"),
+                "exceptions": exceptions,
+            })
 
-        if alerts:
-            print("Status: REVIEW REQUIRED")
-            for alert in alerts:
-                print(f"- {alert}")
-        else:
-            print("Status: No exceptions detected")
-
-    print("\nException detection completed.")
+    return results
 
 
 if __name__ == "__main__":
-    main()
+    print(
+        "Exception detector loaded successfully. "
+        "Run the automated tests to verify its behaviour."
+    )
