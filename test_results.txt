@@ -1,3 +1,6 @@
+test_dashboard_data_is_loaded (test_dashboard.TestDashboard.test_dashboard_data_is_loaded) ... ok
+test_dashboard_records_contain_kpis_and_exceptions (test_dashboard.TestDashboard.test_dashboard_records_contain_kpis_and_exceptions) ... ok
+test_expected_sample_exception_is_detected (test_dashboard.TestDashboard.test_expected_sample_exception_is_detected) ... ok
 test_high_moisture_is_flagged (test_exception_detector.TestExceptionDetector.test_high_moisture_is_flagged) ... ok
 test_high_residual_oil_is_flagged (test_exception_detector.TestExceptionDetector.test_high_residual_oil_is_flagged) ... ok
 test_high_solvent_consumption_is_flagged (test_exception_detector.TestExceptionDetector.test_high_solvent_consumption_is_flagged) ... ok
@@ -18,6 +21,6 @@ test_solvent_consumption (test_kpi_calculator.TestKPICalculator.test_solvent_con
 test_zero_throughput_is_rejected (test_kpi_calculator.TestKPICalculator.test_zero_throughput_is_rejected) ... ok
 
 ----------------------------------------------------------------------
-Ran 18 tests in 0.004s
+Ran 21 tests in 0.006s
 
 OK

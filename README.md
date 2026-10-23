@@ -137,3 +137,45 @@ The report should be regenerated after the underlying data or calculation rules 
 Author: Olufemi Adeoye
 
 Repository: https://github.com/olufemiadeoye77/ai-manufacturing-performance-assistant
+
+## Stage 4: KPI Dashboard and Data Visualisation
+
+The project includes a Python-based dashboard that visualises synthetic manufacturing production data.
+
+### Dashboard features
+
+- Daily production throughput compared with rated capacity.
+- DOC residual oil and moisture indicators.
+- Specific solvent consumption in litres per tonne.
+- Daily capacity utilisation.
+- Summary of records requiring review and detected exceptions.
+
+### Generate the dashboard
+
+Install Matplotlib if it is not already installed:
+
+```bash
+python -m pip install matplotlib
+```
+
+Run the dashboard from the project root:
+
+```bash
+python -m src.dashboard
+```
+
+The dashboard image is generated at:
+
+`reports/manufacturing_kpi_dashboard.png`
+
+### Run automated tests
+
+```bash
+python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+The current test suite contains 21 automated tests.
+
+### Important limitations
+
+The dataset contains synthetic production records. Thresholds are provisional examples and must be validated against approved plant specifications before operational use. The dashboard supports monitoring and investigation; it does not independently diagnose process faults.
