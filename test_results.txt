@@ -1,0 +1,14 @@
+test_high_moisture_is_flagged (test_exception_detector.TestExceptionDetector.test_high_moisture_is_flagged) ... ok
+test_high_residual_oil_is_flagged (test_exception_detector.TestExceptionDetector.test_high_residual_oil_is_flagged) ... ok
+test_high_solvent_consumption_is_flagged (test_exception_detector.TestExceptionDetector.test_high_solvent_consumption_is_flagged) ... ok
+test_low_utilization_is_flagged (test_exception_detector.TestExceptionDetector.test_low_utilization_is_flagged) ... ok
+test_normal_record_has_no_alerts (test_exception_detector.TestExceptionDetector.test_normal_record_has_no_alerts) ... ok
+test_capacity_utilization (test_kpi_calculator.TestKPICalculator.test_capacity_utilization) ... ok
+test_date_is_preserved (test_kpi_calculator.TestKPICalculator.test_date_is_preserved) ... ok
+test_solvent_consumption (test_kpi_calculator.TestKPICalculator.test_solvent_consumption) ... ok
+test_zero_throughput_is_rejected (test_kpi_calculator.TestKPICalculator.test_zero_throughput_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.005s
+
+OK
