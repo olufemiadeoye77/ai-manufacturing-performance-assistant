@@ -4,16 +4,20 @@ import sys
 
 # Locate the project root and make it available for imports.
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.kpi_calculator import load_production_data, calculate_kpis
 from src.exception_detector import detect_exceptions
+from src.explanation_engine import generate_explanations
 
 REPORT_FILE = PROJECT_ROOT / "reports" / "management_report.md"
 
 
 def generate_report():
+    """Generate a management report with KPIs, exceptions, and explanations."""
+
     records = load_production_data()
 
     if not records:
@@ -24,25 +28,36 @@ def generate_report():
     for record in records:
         kpi = calculate_kpis(record)
         alerts = detect_exceptions(kpi)
-        results.append((kpi, alerts))
+        explanations = generate_explanations(kpi, alerts)
+
+        results.append({
+            "kpi": kpi,
+            "alerts": alerts,
+            "explanations": explanations,
+        })
 
     count = len(results)
 
     average_throughput = sum(
-        kpi["throughput_tonnes"] for kpi, _ in results
+        item["kpi"]["throughput_tonnes"] for item in results
     ) / count
 
     average_utilization = sum(
-        kpi["capacity_utilization_pct"] for kpi, _ in results
+        item["kpi"]["capacity_utilization_pct"] for item in results
     ) / count
 
-    average_solvent = sum(
-        kpi["solvent_litres_per_tonne"] for kpi, _ in results
+    # Arithmetic mean of the daily L/tonne values.
+    average_daily_solvent_rate = sum(
+        item["kpi"]["solvent_litres_per_tonne"] for item in results
     ) / count
 
     flagged_records = [
-        (kpi, alerts) for kpi, alerts in results if alerts
+        item for item in results if item["alerts"]
     ]
+
+    total_exceptions = sum(
+        len(item["alerts"]) for item in results
+    )
 
     lines = [
         "# Manufacturing Performance Management Report",
@@ -50,15 +65,23 @@ def generate_report():
         "## 1. Purpose",
         "",
         "This report analyzes synthetic manufacturing data using "
-        "Python-calculated KPIs and provisional exception rules.",
+        "Python-calculated KPIs, provisional exception rules, and a "
+        "rule-based explanation engine.",
+        "",
+        "The explanations suggest areas for investigation. They do not "
+        "identify confirmed root causes.",
         "",
         "## 2. Overall Summary",
         "",
         f"- Production records analyzed: {count}",
         f"- Average throughput: {average_throughput:.2f} tonnes/day",
         f"- Average capacity utilization: {average_utilization:.2f}%",
-        f"- Average solvent consumption: {average_solvent:.2f} L/tonne",
+        (
+            "- Average daily solvent consumption rate: "
+            f"{average_daily_solvent_rate:.2f} L/tonne"
+        ),
         f"- Records requiring review: {len(flagged_records)}",
+        f"- Total exceptions detected: {total_exceptions}",
         "",
         "## 3. Daily Findings",
         "",
@@ -67,7 +90,10 @@ def generate_report():
         "|---|---:|---:|---:|---:|---:|---|",
     ]
 
-    for kpi, alerts in results:
+    for item in results:
+        kpi = item["kpi"]
+        alerts = item["alerts"]
+
         status = "REVIEW REQUIRED" if alerts else "No exception detected"
 
         lines.append(
@@ -87,30 +113,93 @@ def generate_report():
     ])
 
     if not flagged_records:
-        lines.append("No exceptions were detected using the current rules.")
+        lines.append(
+            "No exceptions were detected using the current provisional rules."
+        )
     else:
-        for kpi, alerts in flagged_records:
+        for item in flagged_records:
+            kpi = item["kpi"]
+
             lines.append(f"### {kpi['date']}")
-            for alert in alerts:
+            lines.append("")
+            lines.append(
+                f"**Throughput:** {kpi['throughput_tonnes']:.2f} tonnes"
+            )
+            lines.append("")
+
+            for alert in item["alerts"]:
                 lines.append(f"- {alert}")
+
             lines.append("")
 
     lines.extend([
-        "## 5. Management Follow-up",
+        "## 5. Explanations and Recommended Investigations",
+        "",
+    ])
+
+    if not flagged_records:
+        lines.append("No investigation recommendations were generated.")
+        lines.append("")
+    else:
+        for item in flagged_records:
+            kpi = item["kpi"]
+
+            lines.append(f"### {kpi['date']}")
+            lines.append("")
+
+            for explanation in item["explanations"]:
+                lines.append(f"#### {explanation['exception']}")
+                lines.append("")
+
+                lines.append(
+                    f"- **Observed value:** "
+                    f"{explanation['observed_value']:.2f}"
+                    f"{explanation['unit']}"
+                )
+                lines.append(
+                    f"- **Provisional threshold:** "
+                    f"{explanation['comparison']} "
+                    f"{explanation['threshold']:.2f}"
+                    f"{explanation['unit']}"
+                )
+                lines.append(
+                    f"- **Why it matters:** "
+                    f"{explanation['why_it_matters']}"
+                )
+                lines.append("")
+                lines.append("**Suggested investigation:**")
+                lines.append("")
+
+                for check in explanation["recommended_checks"]:
+                    lines.append(f"- {check}")
+
+                lines.append("")
+                lines.append(
+                    f"> **Caution:** {explanation['note']}"
+                )
+                lines.append("")
+
+    lines.extend([
+        "## 6. Management Follow-up",
         "",
         "- Verify flagged measurements and confirm data quality.",
-        "- Review DOC residual oil against approved product specifications.",
-        "- Investigate moisture readings against approved process limits.",
-        "- Check solvent usage, throughput records, and possible losses.",
-        "- Review capacity utilization against the operating plan.",
-        "- Record findings and corrective actions after human review.",
+        "- Compare results with approved product specifications and "
+        "validated operating limits.",
+        "- Review process records and investigate potential causes.",
+        "- Document findings and corrective actions after human review.",
+        "- Confirm any proposed operational change through the plant's "
+        "approved procedures.",
         "",
-        "## 6. Limitations",
+        "## 7. Limitations",
         "",
-        "All data in this demonstration is synthetic. Thresholds are "
-        "provisional examples, not approved plant limits. Alerts identify "
-        "records for review; they do not prove that a process fault occurred. "
-        "This report is not a substitute for plant procedures or safety controls.",
+        "All production data in this demonstration is synthetic. "
+        "Thresholds are provisional examples, not approved plant limits. "
+        "The explanations are rule-based investigation guidance, not "
+        "AI-verified diagnoses or proof of process failure.",
+        "",
+        "The report is not a substitute for plant procedures, qualified "
+        "engineering judgment, or safety controls. Validate all thresholds, "
+        "calculations, and recommendations before using real plant data.",
         "",
     ])
 
@@ -120,6 +209,7 @@ def generate_report():
     print("Management report generated successfully.")
     print(f"Records analyzed: {count}")
     print(f"Records requiring review: {len(flagged_records)}")
+    print(f"Total exceptions detected: {total_exceptions}")
     print(f"Report saved to: {REPORT_FILE}")
 
 

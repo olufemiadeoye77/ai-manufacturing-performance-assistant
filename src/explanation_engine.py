@@ -1,13 +1,11 @@
 
 """
 AI Manufacturing Performance Assistant
-Manufacturing explanation engine.
+Version 0.3 — Manufacturing Explanation Engine
 
-Converts detected manufacturing exceptions into explanations
-and suggested investigation steps.
-
-Educational prototype using synthetic production data.
-Thresholds are provisional and require operational validation.
+Uses synthetic production data.
+Thresholds are provisional examples and must be validated
+against approved plant operating limits before real-world use.
 """
 
 try:
@@ -18,6 +16,7 @@ except ImportError:
     from exception_detector import detect_exceptions
 
 
+# Keep these thresholds consistent with exception_detector.py.
 EXCEPTION_GUIDANCE = {
     "HIGH DOC RESIDUAL OIL": {
         "field": "doc_residual_oil_pct",
@@ -25,14 +24,14 @@ EXCEPTION_GUIDANCE = {
         "unit": "%",
         "comparison": "above",
         "why_it_matters": (
-            "Higher residual oil in de-oiled cake may indicate "
-            "that extraction performance needs investigation."
+            "High residual oil in de-oiled cake may indicate that "
+            "extraction performance needs investigation."
         ),
         "checks": [
+            "Verify the laboratory result and sampling method.",
             "Review solvent-to-feed ratio and solvent distribution.",
-            "Check feed condition and preparation.",
-            "Review extractor operation and relevant process readings.",
-            "Confirm the laboratory result and sampling method.",
+            "Check feed preparation and material condition.",
+            "Review extractor operating conditions.",
         ],
     },
     "HIGH DOC MOISTURE": {
@@ -45,10 +44,10 @@ EXCEPTION_GUIDANCE = {
             "storage stability, and downstream handling."
         ),
         "checks": [
-            "Review the desolventizer-toaster operating conditions.",
-            "Check drying performance and temperature readings.",
+            "Verify the moisture result and sampling method.",
+            "Review desolventizer-toaster operating conditions.",
+            "Check drying performance and relevant temperature readings.",
             "Review steam supply and material residence time.",
-            "Confirm the moisture result using an approved method.",
         ],
     },
     "HIGH SOLVENT CONSUMPTION": {
@@ -57,14 +56,14 @@ EXCEPTION_GUIDANCE = {
         "unit": "L/tonne",
         "comparison": "above",
         "why_it_matters": (
-            "Higher solvent use per tonne may increase operating costs "
-            "and warrants a review of solvent balance and recovery."
+            "High solvent consumption per tonne may increase operating "
+            "costs and warrants investigation of solvent usage and recovery."
         ),
         "checks": [
-            "Verify solvent usage and feed throughput measurements.",
+            "Verify solvent usage and throughput measurements.",
+            "Review solvent inventory and tank-level records.",
             "Check for leaks or unexplained solvent losses.",
-            "Review solvent recovery and condensate systems.",
-            "Check inventory, tank levels, and measurement records.",
+            "Review solvent recovery system performance.",
         ],
     },
     "LOW CAPACITY UTILIZATION": {
@@ -73,21 +72,21 @@ EXCEPTION_GUIDANCE = {
         "unit": "%",
         "comparison": "below",
         "why_it_matters": (
-            "Low utilization means recorded throughput is below "
+            "Low capacity utilization means recorded throughput is below "
             "half of the configured rated daily capacity."
         ),
         "checks": [
-            "Review actual feed availability and feed quality.",
-            "Check downtime, stoppages, and operating hours.",
-            "Review bottlenecks and equipment operating conditions.",
-            "Confirm the rated capacity and production records.",
+            "Verify the plant's rated daily capacity.",
+            "Review feed availability and feed quality.",
+            "Check operating hours, downtime, and stoppages.",
+            "Investigate equipment bottlenecks and process constraints.",
         ],
     },
 }
 
 
 def explain_exception(kpi_data, exception):
-    """Explain one detected exception using its KPI evidence."""
+    """Return an explanation for one detected exception."""
 
     if exception not in EXCEPTION_GUIDANCE:
         raise ValueError(f"Unknown exception type: {exception}")
@@ -99,24 +98,28 @@ def explain_exception(kpi_data, exception):
         raise ValueError(f"Missing required KPI field: {field}")
 
     observed_value = float(kpi_data[field])
+    threshold = guidance["threshold"]
+    comparison = guidance["comparison"]
 
     return {
         "date": kpi_data.get("date", "Unknown"),
         "exception": exception,
+        "field": field,
         "observed_value": observed_value,
-        "threshold": guidance["threshold"],
+        "threshold": threshold,
+        "comparison": comparison,
         "unit": guidance["unit"],
         "why_it_matters": guidance["why_it_matters"],
         "recommended_checks": guidance["checks"],
         "note": (
             "This is an investigation guide, not a confirmed root cause. "
-            "Thresholds are provisional and should be validated."
+            "Thresholds are provisional and require operational validation."
         ),
     }
 
 
 def generate_explanations(kpi_data, exceptions):
-    """Generate explanations for all exceptions in one KPI record."""
+    """Generate explanations for all exceptions in a KPI record."""
 
     return [
         explain_exception(kpi_data, exception)
@@ -125,7 +128,7 @@ def generate_explanations(kpi_data, exceptions):
 
 
 def format_explanation_report(kpi_data, explanations):
-    """Format explanations as a readable production report."""
+    """Create a readable report for one production record."""
 
     lines = [
         "MANUFACTURING EXCEPTION EXPLANATION",
@@ -147,8 +150,7 @@ def format_explanation_report(kpi_data, explanations):
                 f"{item['unit']}"
             ),
             (
-                f"   Provisional threshold: "
-                f"{item['comparison'] if 'comparison' in item else ''}"
+                f"   Threshold: {item['comparison']} "
                 f"{item['threshold']:.2f}{item['unit']}"
             ),
             f"   Why it matters: {item['why_it_matters']}",
@@ -167,9 +169,10 @@ def format_explanation_report(kpi_data, explanations):
 
 
 def main():
-    """Run the explanation engine on the supplied synthetic dataset."""
+    """Run the explanation engine against the sample dataset."""
 
     records = load_production_data()
+
     print("AI Manufacturing Performance Assistant")
     print("Stage 2: Manufacturing Explanation Engine")
     print("=" * 42)
