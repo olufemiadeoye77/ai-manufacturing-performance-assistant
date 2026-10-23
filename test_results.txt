@@ -9,6 +9,6 @@ test_solvent_consumption (test_kpi_calculator.TestKPICalculator.test_solvent_con
 test_zero_throughput_is_rejected (test_kpi_calculator.TestKPICalculator.test_zero_throughput_is_rejected) ... ok
 
 ----------------------------------------------------------------------
-Ran 9 tests in 0.005s
+Ran 9 tests in 0.003s
 
 OK
