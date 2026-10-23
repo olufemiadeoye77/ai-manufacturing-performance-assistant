@@ -1,0 +1,39 @@
+AI Manufacturing Performance Assistant
+=============================================
+Production records loaded: 5
+
+Date: 2026-10-19
+Throughput: 25.0 tonnes
+Capacity utilization: 50.00%
+DOC residual oil: 2.80%
+DOC moisture: 9.50%
+Solvent consumption: 200.00 L/tonne
+---------------------------------------------
+Date: 2026-10-20
+Throughput: 28.0 tonnes
+Capacity utilization: 56.00%
+DOC residual oil: 2.40%
+DOC moisture: 10.20%
+Solvent consumption: 200.00 L/tonne
+---------------------------------------------
+Date: 2026-10-21
+Throughput: 22.0 tonnes
+Capacity utilization: 44.00%
+DOC residual oil: 3.40%
+DOC moisture: 11.50%
+Solvent consumption: 268.18 L/tonne
+---------------------------------------------
+Date: 2026-10-22
+Throughput: 30.0 tonnes
+Capacity utilization: 60.00%
+DOC residual oil: 2.10%
+DOC moisture: 9.00%
+Solvent consumption: 180.00 L/tonne
+---------------------------------------------
+Date: 2026-10-23
+Throughput: 26.0 tonnes
+Capacity utilization: 52.00%
+DOC residual oil: 2.60%
+DOC moisture: 10.00%
+Solvent consumption: 200.00 L/tonne
+---------------------------------------------
