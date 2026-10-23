@@ -1,0 +1,24 @@
+AI Manufacturing Performance Assistant
+EXCEPTION DETECTION REPORT
+=============================================
+
+Date: 2026-10-19
+Status: No exceptions detected
+
+Date: 2026-10-20
+Status: No exceptions detected
+
+Date: 2026-10-21
+Status: REVIEW REQUIRED
+- HIGH DOC RESIDUAL OIL
+- HIGH DOC MOISTURE
+- HIGH SOLVENT CONSUMPTION
+- LOW CAPACITY UTILIZATION
+
+Date: 2026-10-22
+Status: No exceptions detected
+
+Date: 2026-10-23
+Status: No exceptions detected
+
+Exception detection completed.
