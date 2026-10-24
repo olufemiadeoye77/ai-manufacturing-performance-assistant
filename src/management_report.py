@@ -11,6 +11,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.kpi_calculator import load_production_data, calculate_kpis
 from src.exception_detector import detect_exceptions
 from src.explanation_engine import generate_explanations
+from src.recommendation_engine import generate_recommendations
 
 REPORT_FILE = PROJECT_ROOT / "reports" / "management_report.md"
 
@@ -29,11 +30,13 @@ def generate_report():
         kpi = calculate_kpis(record)
         alerts = detect_exceptions(kpi)
         explanations = generate_explanations(kpi, alerts)
+        recommendations = generate_recommendations(alerts)
 
         results.append({
             "kpi": kpi,
             "alerts": alerts,
             "explanations": explanations,
+            "recommendations": recommendations,
         })
 
     count = len(results)
@@ -180,7 +183,55 @@ def generate_report():
                 lines.append("")
 
     lines.extend([
-        "## 6. Management Follow-up",
+        "## 6. Structured Investigation Recommendations",
+        "",
+        "The following recommendations are generated from the detected "
+        "exceptions. Possible causes require verification and are not "
+        "confirmed diagnoses.",
+        "",
+    ])
+
+    if not flagged_records:
+        lines.append("No investigation recommendations were generated.")
+        lines.append("")
+    else:
+        for item in flagged_records:
+            kpi = item["kpi"]
+
+            lines.append(f"### Production date: {kpi['date']}")
+            lines.append("")
+
+            for recommendation in item["recommendations"]:
+                lines.append(
+                    f"#### {recommendation['exception']}"
+                )
+                lines.append("")
+                lines.append(
+                    f"**Priority:** {recommendation['priority']}"
+                )
+                lines.append("")
+
+                lines.append("**Possible causes to investigate:**")
+                lines.append("")
+                for cause in recommendation["possible_causes"]:
+                    lines.append(f"- {cause}")
+                lines.append("")
+
+                lines.append("**Recommended checks:**")
+                lines.append("")
+                for check in recommendation["recommended_checks"]:
+                    lines.append(f"- {check}")
+                lines.append("")
+
+                lines.append("**Evidence to collect:**")
+                lines.append("")
+                for evidence in recommendation["evidence_to_collect"]:
+                    lines.append(f"- {evidence}")
+                lines.append("")
+
+
+    lines.extend([
+        "## 7. Management Follow-up",
         "",
         "- Verify flagged measurements and confirm data quality.",
         "- Compare results with approved product specifications and "
@@ -190,7 +241,7 @@ def generate_report():
         "- Confirm any proposed operational change through the plant's "
         "approved procedures.",
         "",
-        "## 7. Limitations",
+        "## 8. Limitations",
         "",
         "All production data in this demonstration is synthetic. "
         "Thresholds are provisional examples, not approved plant limits. "

@@ -179,3 +179,85 @@ The current test suite contains 21 automated tests.
 ### Important limitations
 
 The dataset contains synthetic production records. Thresholds are provisional examples and must be validated against approved plant specifications before operational use. The dashboard supports monitoring and investigation; it does not independently diagnose process faults.
+
+## Stage 5: Structured Investigation Recommendations
+
+The project includes a rule-based recommendation engine that provides
+structured investigation guidance for detected manufacturing KPI
+exceptions.
+
+### Features
+
+- Assigns High or Medium priority to detected exceptions.
+- Lists possible causes for investigation.
+- Suggests recommended checks.
+- Identifies evidence that should be collected.
+- Integrates recommendations into the generated management report.
+- Includes automated tests for recommendation generation and report integration.
+
+### Supported exceptions
+
+- High DOC residual oil.
+- High DOC moisture.
+- High solvent consumption.
+- Low capacity utilization.
+
+### Generate the management report
+
+From the project root, run:
+
+```bash
+python -m src.management_report
+```
+
+The report is generated at:
+
+`reports/management_report.md`
+
+### Run automated tests
+
+```bash
+python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+**Current test status:** 35 automated tests passed.
+
+### Important limitations
+
+Recommendations are rule-based investigation guidance. Possible causes
+are not confirmed diagnoses. Production data is synthetic, and all
+thresholds require validation against approved plant specifications
+before operational use. Human review and approved plant procedures
+remain essential.
+
+
+## Stage 5: Recommendation Engine and Management Reporting
+
+The project now includes a rule-based recommendation engine and an automated management report.
+
+### Recommendation Engine
+- Generates suggested checks for high DOC residual oil.
+- Flags high DOC moisture.
+- Recommends investigation of high solvent consumption.
+- Supports review of low capacity utilization.
+
+Recommendations are guidance for investigation and are not confirmed diagnoses.
+
+### Management Reporting
+The report combines KPIs, detected exceptions, explanations, and recommendations.
+
+Report location: `reports/management_report.md`
+
+The latest recorded run analyzed five synthetic records, identified one record requiring review, and detected four exceptions.
+
+### Automated Testing
+The latest recorded test run passed all 35 tests.
+
+Run the tests with:
+
+`python -m unittest discover -s tests -p "test_*.py" -v`
+
+### Limitations
+This is an educational decision-support prototype using synthetic data. Recommendations require qualified human review. The application is not connected to live plant systems, PLCs, SCADA, or enterprise production databases.
+
+
