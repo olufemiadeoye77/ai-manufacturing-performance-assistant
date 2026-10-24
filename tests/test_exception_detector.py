@@ -46,6 +46,20 @@ class TestExceptionDetector(unittest.TestCase):
         )
         self.assertIn("LOW CAPACITY UTILIZATION", result)
 
+    def test_custom_threshold_is_used(self):
+        result = detect_exceptions(
+            self.make_kpi(doc_residual_oil_pct=3.2),
+            thresholds={"doc_residual_oil_pct_max": 3.5},
+        )
+        self.assertNotIn("HIGH DOC RESIDUAL OIL", result)
+
+    def test_unknown_threshold_is_rejected(self):
+        with self.assertRaises(ValueError):
+            detect_exceptions(
+                self.make_kpi(),
+                thresholds={"unknown_limit": 10},
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
