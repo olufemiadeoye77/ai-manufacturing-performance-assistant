@@ -1,0 +1,7 @@
+MANUFACTURING WHAT-IF SCENARIO
+------------------------------
+Throughput: 25 tonnes
+Current consumption: 200.00 L/t
+Target consumption: 180.00 L/t
+Potential solvent savings: 500.00 litres
+Potential reduction: 10.00%

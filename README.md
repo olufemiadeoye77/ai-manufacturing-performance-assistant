@@ -261,3 +261,116 @@ Run the tests with:
 This is an educational decision-support prototype using synthetic data. Recommendations require qualified human review. The application is not connected to live plant systems, PLCs, SCADA, or enterprise production databases.
 
 
+
+
+## Stage 6: Manufacturing What-If Scenario Analysis
+
+This stage introduces a Python module for comparing recorded solvent consumption with a proposed operating target.
+
+### Features
+- Calculates current solvent consumption in litres per tonne.
+- Estimates target solvent requirements at the same throughput.
+- Calculates potential solvent savings in litres.
+- Calculates the percentage reduction against recorded solvent use.
+- Supports optional cost-savings estimates when a cost per litre is supplied.
+- Rejects invalid inputs, including zero throughput and negative solvent consumption.
+
+### Example Scenario
+- Throughput: 25 tonnes
+- Recorded solvent use: 5,000 litres
+- Current consumption: 200 L/t
+- Proposed target: 180 L/t
+- Potential solvent savings: 500 litres
+- Potential reduction: 10%
+
+These are illustrative scenario estimates, not guaranteed or verified plant savings.
+
+### Files
+- `src/scenario_analysis.py` — scenario calculation module.
+- `tests/test_scenario_analysis.py` — automated tests.
+- `results_scenario.txt` — saved example output.
+
+### Run the Scenario
+`python src/scenario_analysis.py`
+
+### Run the Tests
+`python -m unittest discover -s tests -p "test_*.py" -v`
+
+### Limitations
+The scenario analysis is an educational decision-support tool. Actual savings depend on operating conditions, solvent losses, process performance, and verified plant data. Any proposed target should be assessed and approved by qualified plant personnel.
+
+
+
+## Stage 6: Manufacturing What-If Scenario Analysis
+
+This stage introduces a Python module for comparing recorded solvent consumption with a proposed operating target.
+
+### Features
+- Calculates current solvent consumption in litres per tonne.
+- Estimates target solvent requirements at the same throughput.
+- Calculates potential solvent savings in litres.
+- Calculates the percentage reduction against recorded solvent use.
+- Supports optional cost-savings estimates when a cost per litre is supplied.
+- Rejects invalid inputs, including zero throughput and negative solvent consumption.
+
+### Example Scenario
+- Throughput: 25 tonnes
+- Recorded solvent use: 5,000 litres
+- Current consumption: 200 L/t
+- Proposed target: 180 L/t
+- Potential solvent savings: 500 litres
+- Potential reduction: 10%
+
+These are illustrative scenario estimates, not guaranteed or verified plant savings.
+
+### Files
+- `src/scenario_analysis.py` — scenario calculation module.
+- `tests/test_scenario_analysis.py` — automated tests.
+- `results_scenario.txt` — saved example output.
+
+### Run the Scenario
+`python src/scenario_analysis.py`
+
+### Run the Tests
+`python -m unittest discover -s tests -p "test_*.py" -v`
+
+### Limitations
+The scenario analysis is an educational decision-support tool. Actual savings depend on operating conditions, solvent losses, process performance, and verified plant data. Any proposed target should be assessed and approved by qualified plant personnel.
+
+
+
+## Stage 6: Manufacturing What-If Scenario Analysis
+
+This stage introduces a Python module for comparing recorded solvent consumption with a proposed operating target.
+
+### Features
+- Calculates current solvent consumption in litres per tonne.
+- Estimates target solvent requirements at the same throughput.
+- Calculates potential solvent savings in litres.
+- Calculates the percentage reduction against recorded solvent use.
+- Supports optional cost-savings estimates when a cost per litre is supplied.
+- Rejects invalid inputs, including zero throughput and negative solvent consumption.
+
+### Example Scenario
+- Throughput: 25 tonnes
+- Recorded solvent use: 5,000 litres
+- Current consumption: 200 L/t
+- Proposed target: 180 L/t
+- Potential solvent savings: 500 litres
+- Potential reduction: 10%
+
+These are illustrative scenario estimates, not guaranteed or verified plant savings.
+
+### Files
+- `src/scenario_analysis.py` — scenario calculation module.
+- `tests/test_scenario_analysis.py` — automated tests.
+- `results_scenario.txt` — saved example output.
+
+### Run the Scenario
+`python src/scenario_analysis.py`
+
+### Run the Tests
+`python -m unittest discover -s tests -p "test_*.py" -v`
+
+### Limitations
+The scenario analysis is an educational decision-support tool. Actual savings depend on operating conditions, solvent losses, process performance, and verified plant data. Any proposed target should be assessed and approved by qualified plant personnel.
